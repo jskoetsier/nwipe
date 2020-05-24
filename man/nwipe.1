@@ -1,0 +1,121 @@
+.TH NWIPE "1" "March 2020" "nwipe version 0.29" "User Commands"
+.SH NAME
+nwipe \- securely erase disks
+.SH SYNOPSIS
+.B nwipe
+[\fIoptions\fR] [\fIdevice1\fR] [\fIdevice2\fR] ...
+.SH DESCRIPTION
+nwipe is a command that will securely erase disks using a variety of
+recognised methods.  It is a fork of the dwipe command used by Darik's Boot
+and Nuke (dban).  nwipe is included with partedmagic if you want a quick and
+easy bootable CD version.  nwipe was created out of a need to run the DBAN
+dwipe command outside of DBAN, in order to allow its use with any host
+distribution, thus giving better hardware support.  It is essentially the
+same as dwipe, with a few changes:
+.TP
+- pthreads is used instead of fork
+.TP
+- The parted library is used to detect drives
+.TP
+- The code is designed to be compiled with gcc
+.TP
+- SIGUSR1 can be used to log the stats of the current wipe
+
+.SH OPTIONS
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Prints the version number
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Prints a help summary
+.TP
+\fB\-\-autonuke\fR
+If no devices have been specified on the command line, starts wiping all
+devices immediately. If devices have been specified, starts wiping only
+those specified devices immediately.
+.TP
+\fB\-\-autopoweroff\fR
+Power off system on completion of wipe delayed for for one minute. During
+this one minute delay you can abort the shutdown by typing sudo shutdown -c
+.TP
+\fB\-\-sync\fR
+Open devices in sync mode
+.TP
+\fB\-\-noblank\fR
+Do not perform the final blanking pass after the wipe (default is to blank,
+except when the method is RCMP TSSIT OPS\-II).
+.TP
+\fB\-\-nowait\fR
+Do not wait for a key before exiting (default is to wait).
+.TP
+\fB\-\-nosignals\fR
+Do not allow signals to interrupt a wipe (default is to allow).
+.TP
+\fB\-\-nousb\fR
+Do not show or wipe any USB devices, whether in GUI, --nogui or autonuke
+mode. (default is to allow USB devices to be shown and wiped).
+.TP
+\fB\-\-nogui\fR
+Do not show the GUI interface. Can only be used with the autonuke option.
+Nowait option is automatically invoked with the nogui option.
+SIGUSR1 can be used to retrieve the current wiping statistics.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Log more messages, useful for debugging.
+.TP
+\fB\-\-verify\fR=\fITYPE\fR
+Whether to perform verification of erasure (default: last)
+.IP
+off   \- Do not verify
+.IP
+last  \- Verify after the last pass
+.IP
+all   \- Verify every pass
+.IP
+Please mind that HMG IS5 enhanced always verifies the last (PRNG) pass
+regardless of this option.
+.TP
+\fB\-m\fR, \fB\-\-method\fR=\fIMETHOD\fR
+The wiping method (default: dodshort).
+.IP
+dod522022m / dod       \- 7 pass DOD 5220.22\-M method
+.IP
+dodshort / dod3pass    \- 3 pass DOD method
+.IP
+gutmann                \- Peter Gutmann's Algorithm
+.IP
+ops2                   \- RCMP TSSIT OPS\-II
+.IP
+random / prng / stream \- PRNG Stream
+.IP
+zero / quick           \- Overwrite with zeros
+.IP
+verify                 \- Verifies disk is zero filled
+.IP
+is5enh                 \- HMG IS5 enhanced
+.TP
+\fB\-l\fR, \fB\-\-logfile\fR=\fIFILE\fR
+Filename to log to. Default is STDOUT
+.TP
+\fB\-p\fR, \fB\-\-prng\fR=\fIMETHOD\fR
+PRNG option (mersenne|twister|isaac)
+.TP
+\fB\-r\fR, \fB\-\-rounds\fR=\fINUM\fR
+Number of times to wipe the device using the selected method (default: 1)
+.TP
+\fB\-e\fR, \fB\-\-exclude\fR=\fIDEVICES\fR
+Up to ten comma separated devices to be excluded, examples:
+ --exclude=/dev/sdc
+ --exclude=/dev/sdc,/dev/sdd
+.SH BUGS
+Please see the GitHub site for the latest list
+(https://github.com/martijnvanbrummelen/nwipe/issues)
+.SH AUTHOR
+Nwipe is developed by Martijn van Brummelen <github@brumit.nl>
+.SH "SEE ALSO"
+.BR shred (1),
+.BR dwipe (1),
+.BR dd (1),
+.BR dcfldd (1),
+.BR dc3dd (1)
+
