@@ -336,9 +336,9 @@ int main( int argc, char** argv )
             }
 
              Do sector size and block size checking. */
-	    if (!ioctl(fd, c2[i]>HDIO_GET_IDENTITY)) {
-		    nwipe_log ( NWIPE_LOG_NOTICE, "%s has serial numer %s", hd.serial_no );
-	    }
+	    if( ioctl( c2[i]->device_fd, HDIO_GET_IDENTITY) {
+	            nwipe_log ( NWIPE_LOG_NOTICE, "%s has serial number %s", hd.serial_no );
+		    }
 	    
             if( ioctl( c2[i]->device_fd, BLKSSZGET, &c2[i]->device_sector_size ) == 0 )
             {
