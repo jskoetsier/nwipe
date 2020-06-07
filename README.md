@@ -184,10 +184,13 @@ sudo ./nwipe
 ## Quick & Easy, USB bootable version of Nwipe Master for x86_64 systems.
 If you want to just try out a bootable version of nwipe you can download the ShredOS image that's using the latest version of nwipe master and burn it to a USB stick. Instructions and download can be found [here](https://github.com/PartialVolume/shredos.2020.02/blob/master/README.md#obtaining-and-writing-shredos-to-a-usb-flash-drive-the-easy-way-)
 
-## Bugs
+## Original
 
-Bugs can be reported on GitHub:
-https://github.com/martijnvanbrummelen/nwipe
+Original code can be found at: https://github.com/martijnvanbrummelen/nwipe
+
+## Changed code
+
+Changed code for use of serial numbers on output for a friend
 
 ## License
 

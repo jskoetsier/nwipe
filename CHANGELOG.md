@@ -1,6 +1,11 @@
 RELEASE NOTES
 =============
 
+v0.29.1 change in serial no
+------------------------
+- [FIX] change in output of serial number
+
+
 v0.29 release candidate, proposed release May/Jun 2020.
 -----------------------
 Features/fixes in 0.29 that have been committed to the master are tagged with [DONE],
