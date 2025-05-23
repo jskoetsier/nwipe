@@ -32,22 +32,18 @@ mod prng;
 mod version;
 
 use std::fs::File;
-use std::io::{self, Read, Seek, SeekFrom, Write};
-use std::os::unix::io::{AsRawFd, RawFd};
-use std::path::Path;
+use std::io;
+use std::os::unix::io::AsRawFd;
 use std::process::Command;
-use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
-use clap::Parser;
-use log::{error, info, warn};
 use nix::fcntl::{open, OFlag};
 use nix::sys::stat::Mode;
 use nix::unistd::close;
 use signal_hook::{consts::*, iterator::Signals};
 
-use crate::context::{NwipeContext, SelectStatus};
+use crate::context::SelectStatus;
 use crate::device::device_scan;
 use crate::gui::gui_init;
 use crate::logging::nwipe_log;
@@ -150,7 +146,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Set up signal handling
     let mut signals = Signals::new(&[SIGHUP, SIGTERM, SIGQUIT, SIGINT, SIGUSR1])?;
-    let signal_thread = thread::spawn(move || {
+    let _signal_thread = thread::spawn(move || {
         for sig in signals.forever() {
             match sig {
                 SIGUSR1 => {

@@ -10,21 +10,20 @@
  *  Foundation, version 2.
  */
 
-use std::io::{self, Write};
-use std::sync::{Arc, Mutex};
+use std::io;
 use std::thread;
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant};
 
 use crossterm::{
     cursor,
-    event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
+    event::{self, Event, KeyCode},
     execute,
-    style::{self, Color, Stylize},
+    style::{self, Color},
     terminal::{self, ClearType},
 };
 
 use crate::context::{NwipeContext, SelectStatus, PassType};
-use crate::logging::{nwipe_log, LogLevel, convert_seconds_to_hours_minutes_seconds};
+use crate::logging::convert_seconds_to_hours_minutes_seconds;
 
 // Spinner characters for the GUI
 const SPINNER_CHARS: [char; 4] = ['|', '/', '-', '\\'];
@@ -233,7 +232,7 @@ pub fn gui_select(count: usize, contexts: &mut Vec<NwipeContext>) {
 }
 
 /// Display the status screen.
-pub fn gui_status(contexts: &[NwipeContext], count: usize) {
+pub fn gui_status(contexts: &[NwipeContext], _count: usize) {
     let (width, height) = terminal::size().unwrap();
 
     // Status update interval

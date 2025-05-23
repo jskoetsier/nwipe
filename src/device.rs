@@ -11,13 +11,10 @@
  */
 
 use std::fs::{self, File};
-use std::io::{self, Read};
+use std::io;
 use std::os::unix::fs::FileTypeExt;
 use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
-
-use nix::libc;
-use nix::sys::stat::SFlag;
 
 use crate::context::{DeviceIdentity, NwipeContext};
 use crate::logging::{nwipe_log, LogLevel};
@@ -120,7 +117,7 @@ fn get_device_info(context: &mut NwipeContext) -> Result<(), io::Error> {
 }
 
 /// Get device identity information.
-fn get_device_identity(fd: i32, context: &mut NwipeContext) -> Result<(), io::Error> {
+fn get_device_identity(_fd: i32, context: &mut NwipeContext) -> Result<(), io::Error> {
     // In a real implementation, we would use ioctl calls to get device identity information
     // For now, we'll just set some placeholder values
 
@@ -172,12 +169,12 @@ fn extract_device_info_from_sysfs(device_name: &str) -> Option<DeviceIdentity> {
 }
 
 /// Get device size.
-fn get_device_size(fd: i32, context: &mut NwipeContext) -> Result<(), io::Error> {
+fn get_device_size(_fd: i32, context: &mut NwipeContext) -> Result<(), io::Error> {
     // In a real implementation, we would use ioctl calls to get device size
     // For now, we'll use a placeholder implementation
 
     // Try to get size using BLKGETSIZE64 ioctl
-    let mut size: u64 = 0;
+    let size: u64 = 0;
 
     // This is a placeholder for the actual ioctl call
     // In real code, we would use something like:
@@ -210,12 +207,13 @@ fn get_device_size(fd: i32, context: &mut NwipeContext) -> Result<(), io::Error>
 }
 
 /// Get device sector and block size.
-fn get_device_sector_block_size(fd: i32, context: &mut NwipeContext) -> Result<(), io::Error> {
+fn get_device_sector_block_size(_fd: i32, context: &mut NwipeContext) -> Result<(), io::Error> {
     // In a real implementation, we would use ioctl calls to get sector and block size
     // For now, we'll use placeholder values
 
     // Try to get sector size using BLKSSZGET ioctl
-    let mut sector_size: u64 = 0;
+    // Commented out to avoid unused variable warning
+    // let sector_size: u64 = 0;
 
     // This is a placeholder for the actual ioctl call
     // In real code, we would use something like:
@@ -230,7 +228,8 @@ fn get_device_sector_block_size(fd: i32, context: &mut NwipeContext) -> Result<(
     context.device_sector_size = 512;
 
     // Try to get block size using BLKBSZGET ioctl
-    let mut block_size: i32 = 0;
+    // Commented out to avoid unused variable warning
+    // let block_size: i32 = 0;
 
     // This is a placeholder for the actual ioctl call
     // In real code, we would use something like:

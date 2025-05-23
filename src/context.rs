@@ -11,8 +11,6 @@
  */
 
 use std::os::unix::io::RawFd;
-use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
 
 /// The status of a device selection.
 #[derive(Debug, Clone, PartialEq)]

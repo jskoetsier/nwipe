@@ -11,10 +11,10 @@
  */
 
 /// The version string of the program.
-pub const VERSION: &str = "0.2.0";
+pub const VERSION: &str = "0.3.0";
 
 /// The version string with additional information.
-pub const VERSION_STRING: &str = "nwipe 0.2.0 (Rust Edition)";
+pub const VERSION_STRING: &str = "nwipe 0.3.0 (Rust Edition)";
 
 /// The copyright string.
 pub const COPYRIGHT: &str = "Copyright (C) 2025 Sebastiaan Koetsier, based on work by Darik Horn and Andy Beverley";

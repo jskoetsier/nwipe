@@ -11,10 +11,10 @@
  */
 
 use std::io;
-use rand::{Rng, SeedableRng, RngCore};
+use rand::{SeedableRng, RngCore};
 use rand::rngs::StdRng;
-use rand_isaac::{Isaac64Rng, isaac64::Isaac64Core};
-use rand_mt::{Mt19937GenRand64, Mt64};
+use rand_isaac::Isaac64Rng;
+use rand_mt::Mt64;
 
 /// A trait for PRNGs used by nwipe.
 pub trait NwipePrng {

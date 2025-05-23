@@ -13,15 +13,13 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use eframe::{egui, CreationContext};
-use egui::{Color32, RichText, Ui};
+use egui::{Color32, RichText};
 use egui_extras::{Size, StripBuilder, TableBuilder};
-use rfd::FileDialog;
 
-use crate::context::{NwipeContext, PassType, SelectStatus};
+use crate::context::{NwipeContext, SelectStatus};
 use crate::device;
-use crate::logging::{self, LogLevel, nwipe_log};
+use crate::logging::{LogLevel, nwipe_log};
 use crate::method;
-use crate::options::NwipeOptions;
 use crate::version;
 
 /// The main GUI application.
@@ -145,7 +143,7 @@ impl NwipeApp {
         // Start wiping threads
         for device in selected_devices {
             let devices_arc = Arc::clone(&devices_arc);
-            let log_messages = Arc::clone(&log_messages);
+            let _log_messages = Arc::clone(&log_messages);
             let method = self.method.clone();
             let prng = self.prng.clone();
             let rounds = self.rounds;

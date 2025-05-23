@@ -55,7 +55,7 @@ impl fmt::Display for LogLevel {
 }
 
 /// Initialize the logging system.
-pub fn init_logging(verbose: bool) {
+pub fn init_logging(_verbose: bool) {
     // Set up the log file
     let log_path = "/var/log/nwipe.log";
     let file_result = OpenOptions::new()

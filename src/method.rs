@@ -10,17 +10,10 @@
  *  Foundation, version 2.
  */
 
-use std::fs::{File, OpenOptions};
+use std::fs::File;
 use std::io::{self, Read, Seek, SeekFrom, Write};
-use std::os::unix::io::{AsRawFd, FromRawFd, RawFd};
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use std::thread;
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
-
-use nix::fcntl::{fcntl, FcntlArg, OFlag};
-use nix::sys::stat::Mode;
-use nix::unistd::{close, fsync, lseek, Whence};
+use std::os::unix::io::FromRawFd;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::context::{NwipeContext, PassType};
 use crate::logging::{nwipe_log, LogLevel};

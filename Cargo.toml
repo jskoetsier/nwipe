@@ -1,6 +1,6 @@
 [package]
 name = "nwipe"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "Secure disk wiping tool (Rust Edition)"
 authors = ["Sebastiaan Koetsier", "Original by Darik Horn <dajhorn-dban@vanadac.com>", "Modified by Andy Beverley <andy@andybev.com>"]

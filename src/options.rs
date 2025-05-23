@@ -10,8 +10,7 @@
  *  Foundation, version 2.
  */
 
-use clap::{Parser, ValueEnum};
-use std::path::PathBuf;
+use clap::Parser;
 
 /// Nwipe options structure
 #[derive(Debug, Clone)]
