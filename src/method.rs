@@ -91,7 +91,7 @@ pub fn run_method(context: &NwipeContext) -> i32 {
 }
 
 /// OPS-II wiping method (DoD 5220.22-M).
-fn ops2_wipe(context: &mut NwipeContext) -> i32 {
+pub fn ops2_wipe(context: &mut NwipeContext) -> i32 {
     // Set up the wipe parameters
     context.round_count = 3;
     context.pass_count = 3;
@@ -162,7 +162,7 @@ fn ops2_wipe(context: &mut NwipeContext) -> i32 {
 }
 
 /// DoD 5220.22-M wiping method.
-fn dod_wipe(context: &mut NwipeContext) -> i32 {
+pub fn dod_wipe(context: &mut NwipeContext) -> i32 {
     // Set up the wipe parameters
     context.round_count = 1;
     context.pass_count = 3;
@@ -217,7 +217,7 @@ fn dod_wipe(context: &mut NwipeContext) -> i32 {
 }
 
 /// Gutmann wiping method.
-fn gutmann_wipe(context: &mut NwipeContext) -> i32 {
+pub fn gutmann_wipe(context: &mut NwipeContext) -> i32 {
     // Set up the wipe parameters
     context.round_count = 1;
     context.pass_count = 35;
@@ -269,7 +269,7 @@ fn gutmann_wipe(context: &mut NwipeContext) -> i32 {
     for (i, pattern) in patterns.iter().enumerate() {
         context.pass_working = i as i32 + 5;
         context.pass_type = PassType::Write;
-        if let Err(e) = write_pattern(context, pattern) {
+        if let Err(e) = write_pattern(context, *pattern) {
             nwipe_log(
                 LogLevel::Error,
                 &format!("Gutmann write pattern (pass {}) failed: {}", i + 5, e)
@@ -308,7 +308,7 @@ fn gutmann_wipe(context: &mut NwipeContext) -> i32 {
 }
 
 /// Random data wiping method.
-fn random_wipe(context: &mut NwipeContext) -> i32 {
+pub fn random_wipe(context: &mut NwipeContext) -> i32 {
     // Set up the wipe parameters
     context.round_count = 1;
     context.pass_count = 1;
@@ -341,7 +341,7 @@ fn random_wipe(context: &mut NwipeContext) -> i32 {
 }
 
 /// Zero fill wiping method.
-fn zero_wipe(context: &mut NwipeContext) -> i32 {
+pub fn zero_wipe(context: &mut NwipeContext) -> i32 {
     // Set up the wipe parameters
     context.round_count = 1;
     context.pass_count = 1;

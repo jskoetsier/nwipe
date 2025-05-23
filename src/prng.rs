@@ -11,7 +11,7 @@
  */
 
 use std::io;
-use rand::{Rng, SeedableRng};
+use rand::{Rng, SeedableRng, RngCore};
 use rand::rngs::StdRng;
 use rand_isaac::{Isaac64Rng, isaac64::Isaac64Core};
 use rand_mt::{Mt19937GenRand64, Mt64};

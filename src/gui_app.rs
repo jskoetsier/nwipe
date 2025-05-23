@@ -468,9 +468,9 @@ impl eframe::App for NwipeApp {
 
                         // Create a table for the progress
                         TableBuilder::new(ui)
-                            .column(Size::remainder().at_least(100.0)) // Device name
-                            .column(Size::remainder()) // Progress bar
-                            .column(Size::exact(100.0)) // Status
+                            .column(egui_extras::Column::auto().at_least(100.0)) // Device name
+                            .column(egui_extras::Column::remainder()) // Progress bar
+                            .column(egui_extras::Column::exact(100.0)) // Status
                             .header(20.0, |mut header| {
                                 header.col(|ui| {
                                     ui.heading("Device");
@@ -663,9 +663,10 @@ impl eframe::App for NwipeApp {
 /// Run the GUI application.
 pub fn run_gui() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
-        initial_window_size: Some(egui::vec2(1024.0, 768.0)),
-        min_window_size: Some(egui::vec2(800.0, 600.0)),
-        centered: true,
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size([1024.0, 768.0])
+            .with_min_inner_size([800.0, 600.0])
+            .with_centered(true),
         ..Default::default()
     };
 

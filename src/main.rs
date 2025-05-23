@@ -60,7 +60,7 @@ static mut USER_ABORT: bool = false;
 const NWIPE_KNOB_ENTROPY: &str = "/dev/urandom";
 const NWIPE_KNOB_SLEEP: u8 = 1;
 
-fn main() -> Result<i32, Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Parse command line options
     let options = parse_options();
 
@@ -72,10 +72,10 @@ fn main() -> Result<i32, Box<dyn std::error::Error>> {
         // Run the modern GUI application
         nwipe_log(logging::LogLevel::Info, "Starting modern GUI interface");
         return match gui_app::run_gui() {
-            Ok(_) => Ok(0),
+            Ok(_) => Ok(()),
             Err(e) => {
                 nwipe_log(logging::LogLevel::Error, &format!("GUI error: {}", e));
-                Ok(-1)
+                Err(Box::new(e))
             }
         };
     }
@@ -92,7 +92,7 @@ fn main() -> Result<i32, Box<dyn std::error::Error>> {
                 if count == 0 {
                     nwipe_log(logging::LogLevel::Info, "Storage devices not found.");
                     cleanup();
-                    return Ok(-1);
+                    return Ok(());
                 } else {
                     nwipe_log(logging::LogLevel::Info, &format!("Automatically enumerated {} devices.", count));
                     count
@@ -101,7 +101,7 @@ fn main() -> Result<i32, Box<dyn std::error::Error>> {
             Err(e) => {
                 nwipe_log(logging::LogLevel::Error, &format!("Error scanning devices: {}", e));
                 cleanup();
-                return Ok(-1);
+                return Ok(());
             }
         }
     } else {
@@ -112,21 +112,21 @@ fn main() -> Result<i32, Box<dyn std::error::Error>> {
                     nwipe_log(logging::LogLevel::Error, "Devices not found. Check you're not excluding drives unnecessarily.");
                     println!("No drives found");
                     cleanup();
-                    return Ok(1);
+                    return Ok(());
                 }
                 count
             },
             Err(e) => {
                 nwipe_log(logging::LogLevel::Error, &format!("Error getting devices: {}", e));
                 cleanup();
-                return Ok(-1);
+                return Ok(());
             }
         }
     };
 
     if unsafe { TERMINATE_SIGNAL } {
         cleanup();
-        return Ok(1);
+        return Ok(());
     }
 
     // Log system information
@@ -142,7 +142,7 @@ fn main() -> Result<i32, Box<dyn std::error::Error>> {
         Err(e) => {
             nwipe_log(logging::LogLevel::Fatal, &format!("Unable to open entropy source {}: {}", NWIPE_KNOB_ENTROPY, e));
             cleanup();
-            return Ok(e.as_errno().unwrap() as i32);
+            return Ok(());
         }
     };
 
@@ -202,7 +202,7 @@ fn main() -> Result<i32, Box<dyn std::error::Error>> {
         if options.nogui {
             println!("--nogui option must be used with autonuke option");
             cleanup();
-            return Ok(1);
+            return Ok(());
         } else {
             gui::gui_select(nwipe_enumerated, &mut contexts);
         }

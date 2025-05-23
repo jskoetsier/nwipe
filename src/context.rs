@@ -144,6 +144,8 @@ pub struct NwipeContext {
     pub wipe_status: i32,
     /// The sync status flag.
     pub sync_status: bool,
+    /// Whether to verify the wipe.
+    pub verify: bool,
 }
 
 impl Default for NwipeContext {
@@ -179,6 +181,7 @@ impl Default for NwipeContext {
             end_time: 0,
             wipe_status: 0,
             sync_status: false,
+            verify: true,  // Default to verifying the wipe
         }
     }
 }
