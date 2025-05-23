@@ -1,6 +1,32 @@
 RELEASE NOTES
 =============
 
+v0.3.1 Bugfix Release (2025)
+------------------------
+- [FIX] Fixed all critical compiler warnings
+- [FIX] Removed unused imports across all files
+- [FIX] Fixed unused variables by adding underscore prefixes
+- [FIX] Removed unnecessary mutable variables
+- [FIX] Eliminated unused constant NWIPE_KNOB_SLEEP
+- [FIX] Improved thread handling in main.rs
+- [FIX] Enhanced code organization and readability
+
+v0.3.0 Rust Edition with Modern GUI (2025)
+------------------------
+- [FEATURE] Complete conversion from C to Rust
+- [FEATURE] Added modern graphical user interface using egui
+- [FEATURE] Maintained traditional terminal UI as an option
+- [FEATURE] Added command line option to choose between GUI and TUI modes
+- [FEATURE] Implemented proper error handling using Rust's Result type
+- [FEATURE] Used Rust's memory safety features to eliminate potential memory issues
+- [FEATURE] Added device selection with detailed information in GUI
+- [FEATURE] Added visual progress monitoring with progress bars
+- [FEATURE] Added method and PRNG selection dropdowns
+- [FEATURE] Added confirmation dialogs for safety
+- [FEATURE] Added help and about screens with documentation
+- [FEATURE] Enhanced project structure with modular design
+- [FEATURE] Improved build system using Cargo
+
 v0.29.1 change in serial no
 ------------------------
 - [FIX] change in output of serial number
@@ -158,47 +184,4 @@ v0.09
 
 v0.08
 -----
-- Fixed bug #3501746 whereby "wipe finished" was displayed too early
-
-v0.07
------
-- Added threading synchronisation for logging
-- Fixed bug #3486927 (incorrect Sourceforge URL)
-
-v0.06
------
-- Added man page (thanks Michal Ambroz <rebus@seznam.cz>)
-- Updated GPL licence and FSF address (thanks Michal Ambroz <rebus@seznam.cz>)
-
-v0.05
------
-- Added sequence number to disk selection
-- Added check for ncurses header files in subdir
-- Fixed screen corruption bug introduced in 0.04
-- Fixed occasional seg fault on start
-- Introduced dynamic array allocation for devices, with no hard limit
-- Minor updates to configure.ac
-
-v0.04
------
-- Removed references to DBAN in options.c
-- Added log file name option (-l|--logfile)
-- If no log file specified all messages go to STDOUT
-- Incorrect success message after an interruption fixed
-- Improved labelling of disks with no partition table
-- Added help command
-- Added version command
-- Added command 'b' to blank screen during wipe
-- Compilation needs to include panel library
-
-KNOWN BUG - display sometimes becomes corrupted after starting wipe
-
-v0.03
------
-- Added quit option label (ctrl-c)
-- Removed further references to DWIPE
-- Added GPL V2 licence file (COPYING)
-
-v0.02
------
-- Fixed segfault that happened during multiple disk wipes
+- Fixed bug #3501746
