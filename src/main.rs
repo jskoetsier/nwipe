@@ -341,21 +341,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Wait for wipe threads to finish
-    for (i, handle) in thread_handles.iter().enumerate() {
-        if let Err(e) = handle.join() {
+    for i in 0..thread_handles.len() {
+        if i < selected_contexts.len() {
+            if options.verbose {
+                nwipe_log(logging::LogLevel::Info,
+                         &format!("Wipe thread for device {} has been cancelled", selected_contexts[i].device_name));
+            }
+
+            // Close device file descriptor
+            close(selected_contexts[i].device_fd).unwrap_or_else(|e| {
+                nwipe_log(logging::LogLevel::Warning,
+                         &format!("Error closing device {}: {}", selected_contexts[i].device_name, e));
+            });
+        }
+    }
+
+    // Join all threads
+    for handle in thread_handles {
+        if let Err(_e) = handle.join() {
             nwipe_log(logging::LogLevel::Warning, "Error when waiting for wipe thread to cancel.");
         }
-
-        if options.verbose {
-            nwipe_log(logging::LogLevel::Info,
-                     &format!("Wipe thread for device {} has been cancelled", selected_contexts[i].device_name));
-        }
-
-        // Close device file descriptor
-        close(selected_contexts[i].device_fd).unwrap_or_else(|e| {
-            nwipe_log(logging::LogLevel::Warning,
-                     &format!("Error closing device {}: {}", selected_contexts[i].device_name, e));
-        });
     }
 
     // Check for errors and set return status
