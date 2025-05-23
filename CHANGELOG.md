@@ -10,6 +10,7 @@ v0.3.1 Bugfix Release (2025)
 - [FIX] Eliminated unused constant NWIPE_KNOB_SLEEP
 - [FIX] Improved thread handling in main.rs
 - [FIX] Enhanced code organization and readability
+- [FIX] Fixed flickering in the traditional terminal UI by implementing smart screen updates
 
 v0.3.0 Rust Edition with Modern GUI (2025)
 ------------------------

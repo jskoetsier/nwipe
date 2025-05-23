@@ -10,7 +10,7 @@
  *  Foundation, version 2.
  */
 
-use std::io;
+use std::io::{self, Write};
 use std::thread;
 use std::time::{Duration, Instant};
 
@@ -235,10 +235,57 @@ pub fn gui_select(count: usize, contexts: &mut Vec<NwipeContext>) {
 pub fn gui_status(contexts: &[NwipeContext], _count: usize) {
     let (width, height) = terminal::size().unwrap();
 
-    // Status update interval
-    let update_interval = Duration::from_millis(500);
+    // Status update interval - increased to reduce flickering
+    let update_interval = Duration::from_millis(1000);
     let mut last_update = Instant::now();
 
+    // Store previous values to avoid unnecessary updates
+    let mut prev_spinner_indices: Vec<usize> = contexts.iter().map(|_| 0).collect();
+    let mut prev_percentages: Vec<f64> = contexts.iter().map(|_| -1.0).collect();
+    let mut prev_throughputs: Vec<u64> = contexts.iter().map(|_| 0).collect();
+    let mut prev_etas: Vec<i64> = contexts.iter().map(|_| -1).collect();
+
+    // Initial full draw
+    execute!(
+        io::stdout(),
+        terminal::Clear(ClearType::All),
+        cursor::MoveTo(0, 0)
+    ).unwrap();
+
+    // Draw the header
+    draw_header();
+
+    // Print the static parts of the status screen
+    execute!(
+        io::stdout(),
+        cursor::MoveTo(0, 2)
+    ).unwrap();
+
+    println!("\n Wiping Status:");
+    println!(" -------------");
+
+    // Print the footer once
+    execute!(
+        io::stdout(),
+        cursor::MoveTo(0, height - 2),
+        style::SetForegroundColor(Color::White),
+        style::SetBackgroundColor(Color::Blue)
+    ).unwrap();
+
+    let footer = format!(
+        "{:^width$}",
+        "Q: Quit",
+        width = width as usize
+    );
+    println!("{}", footer);
+
+    // Reset colors
+    execute!(
+        io::stdout(),
+        style::ResetColor
+    ).unwrap();
+
+    // Main loop
     loop {
         // Check if we should exit
         if unsafe { crate::TERMINATE_SIGNAL } {
@@ -249,24 +296,13 @@ pub fn gui_status(contexts: &[NwipeContext], _count: usize) {
         if last_update.elapsed() >= update_interval {
             last_update = Instant::now();
 
-            // Clear the screen
-            execute!(
-                io::stdout(),
-                terminal::Clear(ClearType::All),
-                cursor::MoveTo(0, 2)
-            )
-            .unwrap();
+            // Update only the dynamic parts of each device status
+            for (idx, context) in contexts.iter().enumerate() {
+                let row_position = 5 + idx * 3; // Position for this device's status line
 
-            // Draw the header
-            draw_header();
-
-            // Print the status
-            println!("\n Wiping Status:");
-            println!(" -------------");
-
-            for (_i, context) in contexts.iter().enumerate() {
                 // Get the spinner character
-                let spinner = SPINNER_CHARS[context.spinner_idx % SPINNER_CHARS.len()];
+                let spinner_idx = context.spinner_idx % SPINNER_CHARS.len();
+                let spinner = SPINNER_CHARS[spinner_idx];
 
                 // Get the status string
                 let status = match context.pass_type {
@@ -283,52 +319,58 @@ pub fn gui_status(contexts: &[NwipeContext], _count: usize) {
                 let mut seconds = 0;
                 convert_seconds_to_hours_minutes_seconds(context.eta, &mut hours, &mut minutes, &mut seconds);
 
-                // Print device status
-                println!(
-                    " {} {} - {:.2}% - Round {}/{}, Pass {}/{} - ETA: {:02}:{:02}:{:02} - {}",
-                    spinner,
-                    context.device_name,
-                    context.round_percent,
-                    context.round_working,
-                    context.round_count,
-                    context.pass_working,
-                    context.pass_count,
-                    hours,
-                    minutes,
-                    seconds,
-                    status
-                );
-
-                // Print throughput
+                // Calculate throughput
                 let throughput_mb = context.throughput / (1024 * 1024);
-                println!(
-                    "   Throughput: {} MB/s",
-                    throughput_mb
-                );
+
+                // Only update if values have changed
+                let needs_update = spinner_idx != prev_spinner_indices[idx] ||
+                                  (context.round_percent - prev_percentages[idx]).abs() > 0.01 ||
+                                  throughput_mb != prev_throughputs[idx] ||
+                                  context.eta != prev_etas[idx];
+
+                if needs_update {
+                    // Update the spinner and status line
+                    execute!(
+                        io::stdout(),
+                        cursor::MoveTo(0, row_position as u16),
+                        terminal::Clear(ClearType::CurrentLine)
+                    ).unwrap();
+
+                    // Print device status
+                    print!(
+                        " {} {} - {:.2}% - Round {}/{}, Pass {}/{} - ETA: {:02}:{:02}:{:02} - {}",
+                        spinner,
+                        context.device_name,
+                        context.round_percent,
+                        context.round_working,
+                        context.round_count,
+                        context.pass_working,
+                        context.pass_count,
+                        hours,
+                        minutes,
+                        seconds,
+                        status
+                    );
+
+                    // Update throughput line
+                    execute!(
+                        io::stdout(),
+                        cursor::MoveTo(0, (row_position + 1) as u16),
+                        terminal::Clear(ClearType::CurrentLine)
+                    ).unwrap();
+
+                    print!("   Throughput: {} MB/s", throughput_mb);
+
+                    // Store current values for next comparison
+                    prev_spinner_indices[idx] = spinner_idx;
+                    prev_percentages[idx] = context.round_percent;
+                    prev_throughputs[idx] = throughput_mb;
+                    prev_etas[idx] = context.eta;
+                }
             }
 
-            // Print the footer
-            execute!(
-                io::stdout(),
-                cursor::MoveTo(0, height - 2),
-                style::SetForegroundColor(Color::White),
-                style::SetBackgroundColor(Color::Blue)
-            )
-            .unwrap();
-
-            let footer = format!(
-                "{:^width$}",
-                "Q: Quit",
-                width = width as usize
-            );
-            println!("{}", footer);
-
-            // Reset colors
-            execute!(
-                io::stdout(),
-                style::ResetColor
-            )
-            .unwrap();
+            // Flush stdout to ensure all updates are displayed
+            io::stdout().flush().unwrap();
         }
 
         // Handle key presses
