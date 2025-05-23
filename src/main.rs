@@ -397,7 +397,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     check_for_autopoweroff(&options);
 
-    Ok(return_status)
+    Ok(())
 }
 
 fn cleanup() -> i32 {

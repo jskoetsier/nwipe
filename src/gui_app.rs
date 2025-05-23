@@ -666,7 +666,7 @@ pub fn run_gui() -> Result<(), eframe::Error> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([1024.0, 768.0])
             .with_min_inner_size([800.0, 600.0])
-            .with_centered(true),
+            .with_position(egui::pos2(300.0, 200.0)),
         ..Default::default()
     };
 
