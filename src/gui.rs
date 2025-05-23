@@ -264,7 +264,7 @@ pub fn gui_status(contexts: &[NwipeContext], _count: usize) {
             println!("\n Wiping Status:");
             println!(" -------------");
 
-            for (i, context) in contexts.iter().enumerate() {
+            for (_i, context) in contexts.iter().enumerate() {
                 // Get the spinner character
                 let spinner = SPINNER_CHARS[context.spinner_idx % SPINNER_CHARS.len()];
 

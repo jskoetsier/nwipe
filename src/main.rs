@@ -32,7 +32,6 @@ mod prng;
 mod version;
 
 use std::fs::File;
-use std::io;
 use std::os::unix::io::AsRawFd;
 use std::process::Command;
 use std::thread;
@@ -54,7 +53,6 @@ static mut TERMINATE_SIGNAL: bool = false;
 static mut USER_ABORT: bool = false;
 
 const NWIPE_KNOB_ENTROPY: &str = "/dev/urandom";
-const NWIPE_KNOB_SLEEP: u8 = 1;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Parse command line options
@@ -306,7 +304,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Request cancellation of wipe threads
-    for (i, handle) in thread_handles.iter().enumerate() {
+    for (i, _handle) in thread_handles.iter().enumerate() {
         if options.verbose {
             nwipe_log(logging::LogLevel::Info,
                      &format!("Requesting wipe thread cancellation for {}", selected_contexts[i].device_name));
@@ -322,7 +320,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         // Wait for GUI thread to finish
-        if let Err(e) = handle.join() {
+        if let Err(_e) = handle.join() {
             nwipe_log(logging::LogLevel::Warning, "Error when waiting for GUI thread to cancel.");
         }
 

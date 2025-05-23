@@ -87,7 +87,7 @@ impl NwipeApp {
     /// Create a new NwipeApp.
     pub fn new(cc: &CreationContext<'_>) -> Self {
         // Set up custom fonts if needed
-        let mut fonts = egui::FontDefinitions::default();
+        let fonts = egui::FontDefinitions::default();
         // Add custom fonts here if needed
         cc.egui_ctx.set_fonts(fonts);
 
